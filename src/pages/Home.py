@@ -1,3 +1,4 @@
+import socket
 import streamlit as st
 import datetime as dt
 from infrastructure import *
@@ -116,9 +117,11 @@ def sugestaoDoDia():
 
 
 ## pagina ##
-col1, col2 = st.columns(2, border=True)
+col1, col2, col3 = st.columns(3, border=True)
 
 with col1:
     sugestaoDoDia()
 with col2:
-    meusDados()
+    st.user
+with col3:
+    st.session_state["user"]

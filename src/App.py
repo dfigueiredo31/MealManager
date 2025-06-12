@@ -30,36 +30,15 @@ from infrastructure import *
 from entities import *
 
 ## inicialização do user ##
-
-if not st.user.is_logged_in:
-    if st.button("Log in with Google"):
-            st.login("google")
-
-
-st.secrets["api"]["api_key"]
-
 if "user" not in st.session_state:
-    st.session_state["user"] = None
-
-if "firstRun" not in st.session_state:
-    st.session_state["firstRun"] = True
-
-if st.session_state["firstRun"]:
-    try:
-        userSerializer = Serializer.Serializer[User.User]()
-        user = userSerializer.deserialize()
-        st.session_state["user"] = user
-        st.session_state["firstRun"] = False
-    except:
-        st.toast("Não há nenhum utilizador criado")
+    st.session_state["user"] = User.User()
 
 ## configuração da sidebar de navegação ##
-
-if st.session_state["user"] is not None:
+if st.user.is_logged_in:
     pages = {
         "Pessoal": [
             st.Page("pages/Home.py", title="Home"),
-            st.Page("pages/Profile.py", title="Perfil"),
+            st.Page("pages/Settings.py", title="Definições"),
         ],
         "Recursos": [
             st.Page("pages/Meal plan.py", title="Plano Alimentar"),
@@ -67,7 +46,8 @@ if st.session_state["user"] is not None:
         ],
     }
 else:
-    pages = [st.Page("pages/Profile.py", title="Perfil")]
+    pages = [st.Page("pages/Login.py", title="Login")]
+
 
 pg = st.navigation(pages)
 pg.run()

@@ -1,10 +1,11 @@
+import streamlit as st
 import requests
 from typing import Literal
 
 ## Request header ##
 
 headers = {
-    "x-rapidapi-key": "",  # ToDo API secret
+    "x-rapidapi-key": st.secrets["api"]["api_key"],
     "x-rapidapi-host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
     "Content-Type": "application/json",
 }
