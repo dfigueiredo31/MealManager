@@ -3,34 +3,55 @@ from entities import *
 from infrastructure import *
 
 ## Settings page ##
-user = st.session_state["user"]
+user = Db.getUser(st.user["email"])
+diets = Db.getDiets()
+intolerances = Db.getIntolerances()
+
+st.write(user.__dict__)
 
 st.title("Definições")
 
 st.subheader("Utilizador")
-with st.container(border=True):
-    col1, col2, col3 = st.columns(3)
+with st.form("userform", border=True):
+    col1, col2 = st.columns(2)
     with col1:
-        user.firstname = st.text_input("Primeiro nome", value=user.firstname)
-        user.lastname = st.text_input("Apelido", value=user.lastname)
-        user.email = st.text_input("E-mail", value=user.email)
-    with col2:
-        user.preferedDiet = st.selectbox(
+        st.text_input("Nome", value=f"{user.firstname} {user.lastname}", disabled=True)
+        st.text_input("E-mail", value=user.email, disabled=True)
+
+        selectedDiets = st.multiselect(
             "Preferencias alimentares?",
-            Diet.AvailableDiets,
-            (
-                Diet.AvailableDiets.index(user.preferedDiet)
-                if user.preferedDiet is not None
-                else None
-            ),
+            map(lambda x: x.description, diets),
+            map(lambda x: x.description, user.preferedDiets),
         )
-        user.intolerances = st.multiselect(
-            "Intolerancias alimentares?", Diet.Intolerances, user.intolerances
+
+        user.preferedDiets = [
+            diet for diet in diets if diet.description in selectedDiets
+        ]
+
+        selectedIntolerances = st.multiselect(
+            "Intolerancias alimentares?",
+            map(lambda x: x.description, intolerances),
+            map(lambda x: x.description, user.intolerances),
         )
-    with col3:
-        user.age = st.number_input("Idade", 0, 100, value=user.age)
+
+        user.intolerances = [
+            intolerance
+            for intolerance in intolerances
+            if intolerance.description in selectedIntolerances
+        ]
+
+    with col2:
+        user.birthday = st.date_input(
+            "Data nascimento",
+            value=user.birthday,
+            min_value="1900-01-01",
+            max_value="today",
+        )
         user.height = st.slider("Altura", 1.0, 2.5, value=user.height)
-        user.weight = st.slider("Peso", 10.0, 200.0, value=user.weight)
+        user.weight = st.slider("Peso", 10.0, 200.0, user.weight, 0.5)
+
+    if st.form_submit_button("Guardar"):
+        Db.updateUser(user)
 
 st.subheader("Aplicação")
 with st.container(border=True):

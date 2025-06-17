@@ -1,57 +1,37 @@
-from entities import MealPlan
-
-
 class User:
+    """User class"""
 
     def __init__(
         self,
-        username: str = None,
+        id: int,
         firstname: str = None,
         lastname: str = None,
         email: str = None,
-        age: int = None,
+        birthday: str = None,
         height: float = None,
         weight: float = None,
-        preferedDiet: str = None,
+        preferedDiets: list = None,
         intolerances: list = None,
-        spoonacularPassword: str = None,
-        hash: str = None,
-        mealPlan: MealPlan.MealPlan = None,
     ):
-        """Initializes a User obj
+        """Initializes a User object
 
         Args:
-            username (str): username
-            firstname (str): first name
-            lastname (str): last name
-            email (str): user email
-            spoonacularPassword (str): spoonacular password
-            hash (str): user hash
+            id (int): User id.
+            firstname (str, optional): User's first name. Defaults to None.
+            lastname (str, optional): User's last name. Defaults to None.
+            email (str, optional): User's email. Defaults to None.
+            age (int, optional): User's ages. Defaults to None.
+            height (float, optional): User's height in meters. Defaults to None.
+            weight (float, optional): User's weight in kilograms. Defaults to None.
+            preferedDiet (list, optional): A list of the user's prefered diets. Defaults to None.
+            intolerances (list, optional): A list of the user's food intolerances. Defaults to None.
         """
-        self.username = username
+        self.id = id
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
-        self.age = age
+        self.birthday = birthday
         self.height = height
         self.weight = weight
-        self.preferedDiet = preferedDiet
+        self.preferedDiets = preferedDiets
         self.intolerances = intolerances
-        self.spoonacularPassword = spoonacularPassword
-        self.hash = hash
-        self.mealPlan = mealPlan
-
-    def __str__(self):
-        return (
-            f"username: {self.username}\n"
-            f"firstname: {self.firstname}\n"
-            f"lastname: {self.lastname}\n"
-            f"email: {self.email}\n"
-            f"age: {self.age}\n"
-            f"height: {self.height}\n"
-            f"weight: {self.weight}\n"
-            f"preferedDiet: {self.preferedDiet}\n"
-            f"intolerances: {self.intolerances}\n"
-            f"spoonacularPassword: {self.spoonacularPassword}\n"
-            f"hash: {self.hash}\n"
-        )

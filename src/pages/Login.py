@@ -1,4 +1,6 @@
 import streamlit as st
+from infrastructure import *
+from entities import *
 
 ## Login page ##
 with st.container(
@@ -15,6 +17,7 @@ with st.container(
         use_container_width=True,
     ):
         st.login("google")
+
     if st.button(
         "Sign in with Facebook (soon)",
         icon="🌐",
