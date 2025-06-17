@@ -70,8 +70,6 @@ with db.connect("appdata.db") as conn:
 
     conn.commit()
 
-## User entities ##
-
 
 ## Create ##
 def addUser(User: User):
@@ -97,6 +95,11 @@ def addUser(User: User):
 
 
 def addUserDiets(user: User):
+    """Adds diet preferences to the specified user
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         for diet in user.preferedDiets:
@@ -105,6 +108,11 @@ def addUserDiets(user: User):
 
 
 def addUserIntolerances(user: User):
+    """Adds food intolerances to the specified user
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         for intolerance in user.intolerances:
@@ -184,6 +192,14 @@ def getIntolerances(id: int = None) -> list:
 
 
 def getUserDiets(userId: int) -> list:
+    """Returns list of the user's diets
+
+    Args:
+        userId (int): The user's id
+
+    Returns:
+        list: List of Diet objects
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         result = []
@@ -203,6 +219,14 @@ def getUserDiets(userId: int) -> list:
 
 
 def getUserIntolerances(userId: int) -> list:
+    """Returns list of the user's intolerances
+
+    Args:
+        userId (int): The user's id
+
+    Returns:
+        list: List of Intolerance objects
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         result = []
@@ -222,9 +246,17 @@ def getUserIntolerances(userId: int) -> list:
 
 
 ## Update ##
-
-
 def updateUser(user: User):
+    """Updates user data:
+    - birthday
+    - height
+    - weight
+    - dietary preferences
+    - intolerances
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -240,9 +272,12 @@ def updateUser(user: User):
 
 
 ## Delete ##
-
-
 def deleteUserDiets(userId: int):
+    """Deletes stored user diets
+
+    Args:
+        userId (int): The user's id
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("DELETE FROM user_diets WHERE user_id = ?", (userId,))
@@ -250,6 +285,11 @@ def deleteUserDiets(userId: int):
 
 
 def deleteUserIntolerances(userId: int):
+    """Deletes stored user intolerances
+
+    Args:
+        userId (int): The user's id
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("DELETE FROM user_intolerances WHERE user_id = ?", (userId,))
