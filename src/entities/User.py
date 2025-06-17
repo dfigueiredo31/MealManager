@@ -12,6 +12,7 @@ class User:
         weight: float = None,
         preferedDiets: list = None,
         intolerances: list = None,
+        mealPlans: list = None,
     ):
         """Initializes a User object
 
@@ -35,3 +36,4 @@ class User:
         self.weight = weight
         self.preferedDiets = preferedDiets
         self.intolerances = intolerances
+        self.mealPlans = mealPlans

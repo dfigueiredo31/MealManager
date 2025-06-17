@@ -1,5 +1,6 @@
 import sqlite3 as db
 import os
+from entities.MealPlan import MealPlan
 from entities.User import User
 from entities.Diet import Diet
 from entities.Intolerance import Intolerance
@@ -65,6 +66,14 @@ with db.connect("appdata.db") as conn:
             FOREIGN KEY (intolerance_id) REFERENCES intolerances(rowid)
         );
 
+        CREATE TABLE IF NOT EXISTS user_meal_plans (
+            user_id INTEGER,
+            start_date TEXT,
+            end_data TEXT,
+            name TEXT,
+            FOREIGN KEY (user_id) REFERENCES user(rowid) 
+        );
+
     """
     )
 
@@ -118,6 +127,17 @@ def addUserIntolerances(user: User):
         for intolerance in user.intolerances:
             cur.execute(
                 "INSERT INTO user_intolerances VALUES (?,?)", (user.id, intolerance.id)
+            )
+        conn.commit()
+
+
+def createUserMealPlan(user: User):
+    with db.connect("appdata.db") as conn:
+        cur = conn.cursor()
+        for mealPlan in user.mealPlans:
+            cur.execute(
+                "INSERT INTO user_meal_plans VALUES (?,?,?,?)",
+                (user.id, mealPlan.start_date, mealPlan.end_date, mealPlan.name),
             )
         conn.commit()
 
@@ -205,7 +225,8 @@ def getUserDiets(userId: int) -> list:
         result = []
         cur.execute(
             """
-            SELECT a.rowid, a.* FROM diets a 
+            SELECT a.rowid, a.* 
+            FROM diets a 
             JOIN user_diets b ON a.rowid = b.diet_id 
             JOIN users c ON c.rowid = b.user_id 
             WHERE c.rowid = ?
@@ -232,7 +253,8 @@ def getUserIntolerances(userId: int) -> list:
         result = []
         cur.execute(
             """
-            SELECT a.rowid, a.* FROM intolerances a 
+            SELECT a.rowid, a.* 
+            FROM intolerances a 
             JOIN user_intolerances b ON a.rowid = b.intolerance_id 
             JOIN users c ON c.rowid = b.user_id 
             WHERE c.rowid = ?
@@ -242,6 +264,24 @@ def getUserIntolerances(userId: int) -> list:
 
         for row in cur.fetchall():
             result.append(Intolerance(row[0], row[1]))
+        return result
+
+
+def getUserMealPlans(userId: int) -> list:
+    with db.connect("appdata.db") as conn:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT rowid, * 
+            FROM user_meal_plans
+            WHERE user_id = ?
+            """,
+            (userId,),
+        )
+
+        result = []
+        for row in cur.fetchall():
+            result.append(MealPlan(row[0], row[1], row[2], row[3]))
         return result
 
 
