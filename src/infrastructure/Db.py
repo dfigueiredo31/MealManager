@@ -1,4 +1,5 @@
 import sqlite3 as db
+import os
 from entities.User import User
 from entities.Diet import Diet
 from entities.Intolerance import Intolerance
@@ -269,3 +270,18 @@ def deleteUserIntolerances(userId: int):
         cur = conn.cursor()
         cur.execute("DELETE FROM user_intolerances WHERE user_id = ?", (userId,))
         conn.commit()
+
+
+def deleteAllData():
+    """Removes all user data
+
+    Returns:
+        bool: True if user data was removed, False otherwise
+    """
+    try:
+
+        os.remove("appdata.db")
+        return True
+    except Exception as err:
+        print(err)
+        return False

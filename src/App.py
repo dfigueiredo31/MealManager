@@ -3,8 +3,9 @@ from infrastructure import *
 from entities import *
 
 ## inicialização do user ##
+
 if st.user.is_logged_in and not Db.userExists(st.user["email"]):  # no primeiro login
-    user = User.User(st.user["given_name"], st.user["family_name"], st.user["email"])
+    user = User.User(0, st.user["given_name"], st.user["family_name"], st.user["email"])
     Db.addUser(user)
 
 
