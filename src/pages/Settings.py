@@ -57,3 +57,6 @@ st.subheader("Aplicação")
 with st.container(border=True):
     if st.button("Logout"):
         st.logout()
+    if st.button("Remover dados utilizador"):
+        st.logout()
+        Db.deleteAllData()
