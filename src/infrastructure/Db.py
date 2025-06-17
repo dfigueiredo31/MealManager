@@ -70,7 +70,6 @@ with db.connect("appdata.db") as conn:
 
     conn.commit()
 
-
 ## User entities ##
 
 
@@ -116,24 +115,6 @@ def addUserIntolerances(user: User):
 
 
 ## Read ##
-def userExists(email: str) -> bool:
-    """Checks if a user with the given email already exists.
-
-    Args:
-        email (str): The user's email
-
-    Returns:
-        bool: True if the user exists, False otherwise
-    """
-    with db.connect("appdata.db") as conn:
-        cur = conn.cursor()
-        cur.execute("SELECT rowid FROM users WHERE email = ?", (email,))
-        rows = cur.fetchall()
-        if len(rows) > 0:
-            return True
-    return False
-
-
 def getUser(email: str) -> User:
     """Given an email, returns the respective user
 
@@ -143,16 +124,19 @@ def getUser(email: str) -> User:
     Returns:
         User: An user object
     """
-    user: User
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("SELECT rowid,* FROM users WHERE email = ?", (email,))
         row = cur.fetchone()
+
+        if row is None:
+            return None
+
         user = User(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
 
-    user.preferedDiets = getUserDiets(user.id)
-    user.intolerances = getUserIntolerances(user.id)
-    return user
+        user.preferedDiets = getUserDiets(user.id)
+        user.intolerances = getUserIntolerances(user.id)
+        return user
 
 
 def getDiets(id: int = None) -> list:
@@ -279,9 +263,9 @@ def deleteAllData():
         bool: True if user data was removed, False otherwise
     """
     try:
-
+        conn.close()
         os.remove("appdata.db")
         return True
     except Exception as err:
-        print(err)
+        print("erro delete", err)
         return False
