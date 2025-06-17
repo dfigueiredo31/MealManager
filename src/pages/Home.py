@@ -1,4 +1,3 @@
-import socket
 import streamlit as st
 import datetime as dt
 from infrastructure import *
@@ -65,31 +64,20 @@ def receitaModal(receita):
                     "imageType": receita["imageType"],
                 },
             )
-            st.form_submit_button(
-                "Adicionar",
-                on_click=Api.postAddToMealPlan,
-                args=[st.session_state["user"], refeicao],
-            )
-
-
-def meusDados():
-    # bmi = massa (kg) / altura^2
-    bmi = round(
-        st.session_state["user"].weight / pow(st.session_state["user"].height, 2), 2
-    )
-
-    st.header("Os meus dados")
-    st.text(f"Idade: {st.session_state["user"].age}")
-    st.text(f"Peso: {st.session_state["user"].weight} kg")
-    st.text(f"Altura: {st.session_state["user"].height} m")
-    st.text(f"BMI: {bmi}")
+            # st.form_submit_button(
+            #     "Adicionar",
+            #     on_click=Api.postAddToMealPlan,
+            #     args=[st.session_state["user"], refeicao],
+            # )
 
 
 def sugestaoDoDia():
     receita = Api.getRecipes(
         "main dish",
-        st.session_state["user"].preferedDiet,
-        st.session_state["user"].intolerances,
+        # st.session_state["user"].preferedDiet,
+        # st.session_state["user"].intolerances,
+        "",
+        [],
         [],
         [],
         False,
@@ -124,4 +112,5 @@ with col1:
 with col2:
     st.user
 with col3:
-    st.session_state["user"]
+    # st.session_state["user"]
+    pass

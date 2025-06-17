@@ -1,1 +1,1 @@
-__all__ = ["Serializer", "Api"]
+__all__ = ["Serializer", "Api", "Db"]
