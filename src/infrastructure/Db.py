@@ -71,9 +71,6 @@ with db.connect("appdata.db") as conn:
     conn.commit()
 
 
-## User entities ##
-
-
 ## Create ##
 def addUser(User: User):
     """Creates a new user
@@ -98,6 +95,11 @@ def addUser(User: User):
 
 
 def addUserDiets(user: User):
+    """Adds diet preferences to the specified user
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         for diet in user.preferedDiets:
@@ -106,6 +108,11 @@ def addUserDiets(user: User):
 
 
 def addUserIntolerances(user: User):
+    """Adds food intolerances to the specified user
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         for intolerance in user.intolerances:
@@ -116,24 +123,6 @@ def addUserIntolerances(user: User):
 
 
 ## Read ##
-def userExists(email: str) -> bool:
-    """Checks if a user with the given email already exists.
-
-    Args:
-        email (str): The user's email
-
-    Returns:
-        bool: True if the user exists, False otherwise
-    """
-    with db.connect("appdata.db") as conn:
-        cur = conn.cursor()
-        cur.execute("SELECT rowid FROM users WHERE email = ?", (email,))
-        rows = cur.fetchall()
-        if len(rows) > 0:
-            return True
-    return False
-
-
 def getUser(email: str) -> User:
     """Given an email, returns the respective user
 
@@ -143,16 +132,19 @@ def getUser(email: str) -> User:
     Returns:
         User: An user object
     """
-    user: User
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("SELECT rowid,* FROM users WHERE email = ?", (email,))
         row = cur.fetchone()
+
+        if row is None:
+            return None
+
         user = User(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
 
-    user.preferedDiets = getUserDiets(user.id)
-    user.intolerances = getUserIntolerances(user.id)
-    return user
+        user.preferedDiets = getUserDiets(user.id)
+        user.intolerances = getUserIntolerances(user.id)
+        return user
 
 
 def getDiets(id: int = None) -> list:
@@ -200,6 +192,14 @@ def getIntolerances(id: int = None) -> list:
 
 
 def getUserDiets(userId: int) -> list:
+    """Returns list of the user's diets
+
+    Args:
+        userId (int): The user's id
+
+    Returns:
+        list: List of Diet objects
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         result = []
@@ -219,6 +219,14 @@ def getUserDiets(userId: int) -> list:
 
 
 def getUserIntolerances(userId: int) -> list:
+    """Returns list of the user's intolerances
+
+    Args:
+        userId (int): The user's id
+
+    Returns:
+        list: List of Intolerance objects
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         result = []
@@ -238,9 +246,17 @@ def getUserIntolerances(userId: int) -> list:
 
 
 ## Update ##
-
-
 def updateUser(user: User):
+    """Updates user data:
+    - birthday
+    - height
+    - weight
+    - dietary preferences
+    - intolerances
+
+    Args:
+        user (User): User object
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -256,9 +272,12 @@ def updateUser(user: User):
 
 
 ## Delete ##
-
-
 def deleteUserDiets(userId: int):
+    """Deletes stored user diets
+
+    Args:
+        userId (int): The user's id
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("DELETE FROM user_diets WHERE user_id = ?", (userId,))
@@ -266,6 +285,11 @@ def deleteUserDiets(userId: int):
 
 
 def deleteUserIntolerances(userId: int):
+    """Deletes stored user intolerances
+
+    Args:
+        userId (int): The user's id
+    """
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
         cur.execute("DELETE FROM user_intolerances WHERE user_id = ?", (userId,))
@@ -279,9 +303,9 @@ def deleteAllData():
         bool: True if user data was removed, False otherwise
     """
     try:
-
+        conn.close()
         os.remove("appdata.db")
         return True
     except Exception as err:
-        print(err)
+        print("erro delete", err)
         return False
