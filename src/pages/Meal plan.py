@@ -1,7 +1,6 @@
-from ast import arg
 import streamlit as st
 from entities.MealPlan import MealPlan
-from infrastructure import *
+from infrastructure import Db
 
 
 ## Meal plan page ##
@@ -20,40 +19,17 @@ def newPlan():
         st.rerun()
 
 
-@st.dialog("Resultados pesquisa")
-def searchResults():
-
-    st.json(
-        Api.getRecipes(
-            st.session_state.searchString,
-            [],
-            [],
-            [],
-            [],
-            True,
-            True,
-            True,
-            True,
-            False,
-            120,
-            10,
-        ).json(),
-        expanded=False,
-    )
-
-    st.session_state.searchString = ""
-
-
 st.title("Plano alimentar")
 
 if len(userMealPlans) == 0:
     st.info("Não há nenhum plano criado para o utilizador.")
 
-st.text_input(
-    "Pesquisar refeições",
-    key="searchString",
-    on_change=searchResults,
-)
+with st.form("mealSearch"):
+    st.session_state.searchString = st.text_input(
+        "Pesquisar refeições",
+    )
+    if st.form_submit_button("Pesquisa"):
+        st.switch_page(st.Page("pages/SearchResults.py", title="Pesquisa"))
 
 
 for mealPlan in userMealPlans:
