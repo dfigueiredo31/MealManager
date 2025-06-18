@@ -69,9 +69,18 @@ with db.connect("appdata.db") as conn:
         CREATE TABLE IF NOT EXISTS user_meal_plans (
             user_id INTEGER,
             start_date TEXT,
-            end_data TEXT,
+            end_date TEXT,
             name TEXT,
             FOREIGN KEY (user_id) REFERENCES user(rowid) 
+        );
+
+        CREATE TABLE IF NOT EXISTS meal_plan_items (
+            meal_plan_id INTEGER,
+            title TEXT,
+            date TEXT,
+            external_id TEXT,
+            image TEXT,
+            FOREIGN KEY (meal_plan_id) REFERENCES meal_plan(rowid)
         );
 
     """
