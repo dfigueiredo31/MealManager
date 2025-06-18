@@ -2,7 +2,14 @@ from datetime import date
 
 
 class MealPlan:
-    def __init__(self, id: int, startDate: date, endDate: date, name: str = None):
+    def __init__(
+        self,
+        id: int,
+        startDate: date,
+        endDate: date,
+        mealPlanItems: list,
+        name: str = None,
+    ):
         """Initializes a MealPlan object
 
         Args:
@@ -14,4 +21,5 @@ class MealPlan:
         self.id = id
         self.startDate = startDate
         self.endDate = endDate
+        self.mealPlanItems = mealPlanItems
         self.name = name

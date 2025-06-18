@@ -1,19 +1,17 @@
-import json
+from datetime import date
 
 
 class MealPlanItem:
     def __init__(
         self,
-        timestamp: int,
-        slot: int,
-        position: int,
-        itemType: str,
-        value: dict,
-        mealPlanId: int = None,
+        id: int,
+        title: str,
+        date: date,
+        externalId: str = None,
+        image: str = None,
     ):
-        self.timestamp = timestamp
-        self.slot = slot
-        self.position = position
-        self.mealPlanId = mealPlanId
-        self.itemType = itemType
-        self.value = value
+        self.id = id
+        self.title = title
+        self.date = date
+        self.externalId = externalId
+        self.image = image
