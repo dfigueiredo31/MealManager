@@ -15,8 +15,8 @@ def newPlan():
     endDate = st.date_input("Data fim")
 
     if st.button("Criar"):
-        user.mealPlans.append(MealPlan(0, startDate, endDate, name))
-        Db.addUserMealPlan(user)
+        Db.addUserMealPlan(user, MealPlan(0, startDate, endDate, name))
+        st.rerun()
 
 
 st.title("Plano alimentar")
@@ -26,3 +26,9 @@ if len(userMealPlans) == 0:
 
 if st.button("Novo plano"):
     newPlan()
+
+for mealPlan in userMealPlans:
+    st.divider()
+    st.write(f"Nome: {mealPlan.name}")
+    st.write(f"Data inicio: {mealPlan.startDate}")
+    st.write(f"Data fim: {mealPlan.endDate}")

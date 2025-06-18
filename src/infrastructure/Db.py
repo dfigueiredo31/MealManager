@@ -131,14 +131,13 @@ def addUserIntolerances(user: User):
         conn.commit()
 
 
-def addUserMealPlan(user: User):
+def addUserMealPlan(user: User, mealPlan: MealPlan):
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
-        for mealPlan in user.mealPlans:
-            cur.execute(
-                "INSERT INTO user_meal_plans VALUES (?,?,?,?)",
-                (user.id, mealPlan.startDate, mealPlan.endDate, mealPlan.name),
-            )
+        cur.execute(
+            "INSERT INTO user_meal_plans VALUES (?,?,?,?)",
+            (user.id, mealPlan.startDate, mealPlan.endDate, mealPlan.name),
+        )
         conn.commit()
 
 
@@ -282,7 +281,7 @@ def getUserMealPlans(userId: int) -> list:
 
         result = []
         for row in cur.fetchall():
-            result.append(MealPlan(row[0], row[1], row[2], row[3]))
+            result.append(MealPlan(row[0], row[2], row[3], row[4]))
         return result
 
 
