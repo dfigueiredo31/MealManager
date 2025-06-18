@@ -3,6 +3,9 @@ import datetime as dt
 from infrastructure import *
 from entities import *
 
+## Home page ##
+user = Db.getUser(st.user["email"])
+
 
 @st.dialog("Sugestão do dia")
 def receitaModal(receita):
@@ -74,10 +77,8 @@ def receitaModal(receita):
 def sugestaoDoDia():
     receita = Api.getRecipes(
         "main dish",
-        # st.session_state["user"].preferedDiet,
-        # st.session_state["user"].intolerances,
-        "",
-        [],
+        list(map(lambda x: x.description, user.preferedDiets)),
+        list(map(lambda x: x.description, user.intolerances)),
         [],
         [],
         False,
@@ -87,6 +88,7 @@ def sugestaoDoDia():
         True,
         45,
         1,
+        "",
     ).json()["results"][0]
 
     st.header("Sugestão do dia")

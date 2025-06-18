@@ -48,7 +48,7 @@ def postAddToMealPlan(user, mealPlanItem):
 
 def getRecipes(
     query: str,
-    diet: str,
+    diets: list,
     intolerances: list,
     includeIngredients: list,
     excludeIngredients: list,
@@ -65,7 +65,7 @@ def getRecipes(
 
     Args:
         query (str): _description_
-        diet (str): _description_
+        diets (list): _description_
         intolerances (list): _description_
         includeIngredients (list): _description_
         excludeIngredients (list): _description_
@@ -85,8 +85,8 @@ def getRecipes(
 
     querystring = {
         "query": query,
-        "diet": diet,
-        "intolerances": intolerances,
+        "diet": ",".join(diets),
+        "intolerances": ",".join(intolerances),
         "includeIngredients": includeIngredients,
         "excludeIngredients": excludeIngredients,
         "instructionsRequired": instructionsRequired,
@@ -100,7 +100,8 @@ def getRecipes(
         "number": number,
     }
 
-    return requests.get(url, headers=headers, params=querystring)
+    result = requests.get(url, headers=headers, params=querystring)
+    return result
 
 
 def getRecipeInformation(id):
