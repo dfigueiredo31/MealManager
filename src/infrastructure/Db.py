@@ -1,5 +1,6 @@
 import sqlite3 as db
 import os
+from entities.MealPlanItem import MealPlanItem
 from entities.MealPlan import MealPlan
 from entities.User import User
 from entities.Diet import Diet
@@ -150,6 +151,21 @@ def addUserMealPlan(user: User, mealPlan: MealPlan):
         conn.commit()
 
 
+def addMealPlanItem(mealPlanId: int, mealPlanItem: MealPlanItem):
+    with db.connect("appdata.db") as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO meal_plan_items VALUES (?,?,?,?,?)",
+            (
+                mealPlanId,
+                mealPlanItem.title,
+                mealPlanItem.date,
+                mealPlanItem.externalId,
+                mealPlanItem.image,
+            ),
+        )
+
+
 ## Read ##
 def getUser(email: str) -> User:
     """Given an email, returns the respective user
@@ -290,7 +306,25 @@ def getUserMealPlans(userId: int) -> list:
 
         result = []
         for row in cur.fetchall():
-            result.append(MealPlan(row[0], row[2], row[3], row[4]))
+            mealPlanItems = getMealPlanItems(row[0])
+            result.append(MealPlan(row[0], row[2], row[3], mealPlanItems, row[4]))
+        return result
+
+
+def getMealPlanItems(mealPlanId: int) -> list:
+    with db.connect("appdata.db") as conn:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT rowid, *
+            FROM meal_plan_items
+            WHERE meal_plan_id = ?
+            """,
+            (mealPlanId,),
+        )
+        result = []
+        for row in cur.fetchall():
+            result.append(MealPlanItem(row[0], row[1], row[2], row[3], row[4]))
         return result
 
 
