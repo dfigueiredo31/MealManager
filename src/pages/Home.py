@@ -1,5 +1,5 @@
 import streamlit as st
-from pages import MealDetailModal
+from pages import MealDetail
 from infrastructure import *
 from entities import *
 
@@ -36,7 +36,11 @@ def sugestaoDoDia():
         f"🌍 {", ".join(receita["cuisines"])}" if len(receita["cuisines"]) > 0 else ""
     )
     st.text(f"👍 {receita["aggregateLikes"]}")
-    st.button("Ver mais", on_click=MealDetailModal.mealDetailModal, args=[receita])
+    st.button(
+        "Ver mais",
+        on_click=MealDetail.displayMealDetail,
+        args=[receita, "modal", True, False, False, True, True],
+    )
 
 
 ## pagina ##

@@ -1,4 +1,5 @@
 import streamlit as st
+from pages import MealDetail
 
 
 @st.dialog("Resultados pesquisa")
@@ -35,3 +36,6 @@ def displaySearchResults(results):
                                 )
                                 / 100
                             )
+            MealDetail.displayMealDetail(
+                result, "standalone", False, False, True, True, False
+            )
