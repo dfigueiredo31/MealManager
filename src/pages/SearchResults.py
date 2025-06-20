@@ -9,5 +9,5 @@ def displaySearchResults(results):
     else:
         for result in results:
             MealDetail.displayMealDetail(
-                result, "standalone", False, False, True, True, False
+                result, "standalone", True, True, False, True, True, True
             )

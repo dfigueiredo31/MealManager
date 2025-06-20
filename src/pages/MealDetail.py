@@ -3,35 +3,6 @@ import datetime as dt
 from typing import Literal
 
 
-# st.subheader(result["title"])
-# col1, col2 = st.columns(2)
-# with col1:
-#     st.image(
-#         result["image"],
-#     )
-
-
-# with col2:
-#     declaracaoNutricional = list(
-#         result["nutrition"]["nutrients"][i] for i in [0, 1, 3, 7, 10]
-#     )
-#     col1, col2 = st.columns(2)
-#     for infoNutricional in declaracaoNutricional:
-#         with col1:
-#             with st.container(height=20, border=False):
-#                 st.caption(
-#                     f"{infoNutricional["name"]} : {infoNutricional["amount"]} {infoNutricional["unit"]}"
-#                 )
-#         with col2:
-#             with st.container(height=20, border=False):
-#                 st.progress(
-#                     (
-#                         infoNutricional["percentOfDailyNeeds"]
-#                         if infoNutricional["percentOfDailyNeeds"] <= 100
-#                         else 100
-#                     )
-#                     / 100
-#                 )
 def mealNutritionalInfo(meal):
     nutritionStats = list(meal["nutrition"]["nutrients"][i] for i in [0, 1, 3, 7, 10])
     col1, col2 = st.columns(2)
@@ -58,6 +29,7 @@ def mealDetailStandalone(
     showSummary: bool,
     showIngredients: bool,
     showNutrition: bool,
+    showPreparationSteps: bool,
 ):
     st.json(recipe, expanded=False)
     if showTitle:
@@ -90,6 +62,11 @@ def mealDetailStandalone(
             for ingrediente in recipe["nutrition"]["ingredients"]:
                 st.caption(ingrediente["name"])
 
+    if showPreparationSteps:
+        with st.expander("Preparação"):
+            for step in recipe["analyzedInstructions"][0]["steps"]:
+                st.caption(step["step"])
+
 
 @st.dialog("Detalhe")
 def mealDetailModal(
@@ -99,9 +76,16 @@ def mealDetailModal(
     showSummary: bool,
     showIngredients: bool,
     showNutrition: bool,
+    showPreparationSteps: bool,
 ):
     mealDetailStandalone(
-        recipe, showTitle, showImage, showSummary, showIngredients, showNutrition
+        recipe,
+        showTitle,
+        showImage,
+        showSummary,
+        showIngredients,
+        showNutrition,
+        showPreparationSteps,
     )
 
 
@@ -113,12 +97,25 @@ def displayMealDetail(
     showSummary: bool,
     showIngredients: bool,
     showNutrition: bool,
+    showPreparationSteps: bool,
 ):
     if displayMode == "modal":
         mealDetailModal(
-            recipe, showTitle, showImage, showSummary, showIngredients, showNutrition
+            recipe,
+            showTitle,
+            showImage,
+            showSummary,
+            showIngredients,
+            showNutrition,
+            showPreparationSteps,
         )
     else:
         mealDetailStandalone(
-            recipe, showTitle, showImage, showSummary, showIngredients, showNutrition
+            recipe,
+            showTitle,
+            showImage,
+            showSummary,
+            showIngredients,
+            showNutrition,
+            showPreparationSteps,
         )

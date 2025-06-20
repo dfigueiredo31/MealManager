@@ -95,11 +95,12 @@ def getRecipes(
         "addRecipeInformation": addRecipeInformation,
         "addRecipeInstructions": addRecipeInstructions,
         "addRecipeNutrition": addRecipeNutrition,
-        "maxReadyTime": maxReadyTime,
-        # "ignorePantry": "true",
         "sort": sort,
         "number": number,
     }
+
+    if maxReadyTime is not None:
+        querystring["maxReadyTime"] = maxReadyTime
 
     result = requests.get(url, headers=headers, params=querystring)
     return result
