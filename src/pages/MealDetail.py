@@ -1,6 +1,6 @@
 import streamlit as st
-import datetime as dt
 from typing import Literal
+from pages import AddToPlanForm
 
 
 def mealNutritionalInfo(meal):
@@ -30,6 +30,7 @@ def mealDetailStandalone(
     showIngredients: bool,
     showNutrition: bool,
     showPreparationSteps: bool,
+    showAddToPlan: bool,
 ):
     st.json(recipe, expanded=False)
     if showTitle:
@@ -67,6 +68,10 @@ def mealDetailStandalone(
             for step in recipe["analyzedInstructions"][0]["steps"]:
                 st.caption(step["step"])
 
+    if showAddToPlan:
+        with st.expander("Adicionar a plano"):
+            AddToPlanForm.displayAddToPlanForm(recipe)
+
 
 @st.dialog("Detalhe")
 def mealDetailModal(
@@ -77,6 +82,7 @@ def mealDetailModal(
     showIngredients: bool,
     showNutrition: bool,
     showPreparationSteps: bool,
+    showAddToPlan: bool,
 ):
     mealDetailStandalone(
         recipe,
@@ -86,6 +92,7 @@ def mealDetailModal(
         showIngredients,
         showNutrition,
         showPreparationSteps,
+        showAddToPlan,
     )
 
 
@@ -98,6 +105,7 @@ def displayMealDetail(
     showIngredients: bool,
     showNutrition: bool,
     showPreparationSteps: bool,
+    showAddToPlan,
 ):
     if displayMode == "modal":
         mealDetailModal(
@@ -108,6 +116,7 @@ def displayMealDetail(
             showIngredients,
             showNutrition,
             showPreparationSteps,
+            showAddToPlan,
         )
     else:
         mealDetailStandalone(
@@ -118,4 +127,5 @@ def displayMealDetail(
             showIngredients,
             showNutrition,
             showPreparationSteps,
+            showAddToPlan,
         )

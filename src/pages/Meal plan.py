@@ -15,7 +15,7 @@ def newPlan():
     endDate = st.date_input("Data fim")
 
     if st.button("Criar"):
-        Db.addUserMealPlan(user, MealPlan(0, startDate, endDate, name))
+        Db.addUserMealPlan(user, MealPlan(0, startDate, endDate, [], name))
         st.rerun()
 
 
@@ -28,6 +28,11 @@ if len(userMealPlans) != 0:
         st.write(f"Nome: {mealPlan.name}")
         st.write(f"Data inicio: {mealPlan.startDate}")
         st.write(f"Data fim: {mealPlan.endDate}")
+
+        for mealPlanItem in mealPlan.mealPlanItems:
+            st.write(mealPlanItem.title)
+            st.write(mealPlanItem.date)
+            st.write(mealPlanItem.image)
 else:
     st.info("Não há nenhum plano criado para o utilizador.")
 
