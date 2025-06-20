@@ -1,7 +1,7 @@
 import streamlit as st
-from entities.MealPlan import MealPlan
 from infrastructure import Db
-
+from entities.MealPlan import MealPlan
+from pages import SearchForm
 
 ## Meal plan page ##
 user = Db.getUser(st.user["email"])
@@ -21,22 +21,15 @@ def newPlan():
 
 st.title("Plano alimentar")
 
-if len(userMealPlans) == 0:
+if len(userMealPlans) != 0:
+
+    for mealPlan in userMealPlans:
+        st.divider()
+        st.write(f"Nome: {mealPlan.name}")
+        st.write(f"Data inicio: {mealPlan.startDate}")
+        st.write(f"Data fim: {mealPlan.endDate}")
+else:
     st.info("Não há nenhum plano criado para o utilizador.")
-
-with st.form("mealSearch"):
-    st.session_state.searchString = st.text_input(
-        "Pesquisar refeições",
-    )
-    if st.form_submit_button("Pesquisa"):
-        st.switch_page(st.Page("pages/SearchResults.py", title="Pesquisa"))
-
-
-for mealPlan in userMealPlans:
-    st.divider()
-    st.write(f"Nome: {mealPlan.name}")
-    st.write(f"Data inicio: {mealPlan.startDate}")
-    st.write(f"Data fim: {mealPlan.endDate}")
 
 if st.button("Novo plano"):
     newPlan()

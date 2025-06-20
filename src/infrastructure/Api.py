@@ -46,6 +46,7 @@ def postAddToMealPlan(user, mealPlanItem):
 ## GET ##
 
 
+@st.cache_data
 def getRecipes(
     query: str,
     diets: list,

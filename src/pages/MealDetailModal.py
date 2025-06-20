@@ -2,7 +2,7 @@ import streamlit as st
 import datetime as dt
 
 
-@st.dialog("Sugestão do dia")
+@st.dialog("Detalhe")
 def mealDetailModal(recipe):
     st.subheader(recipe["title"])
     st.json(recipe, expanded=False)

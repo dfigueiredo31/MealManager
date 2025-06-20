@@ -1,10 +1,7 @@
 import streamlit as st
 from infrastructure import *
 from entities import *
-
-## session state ##
-if "searchString" not in st.session_state:
-    st.session_state.searchString = ""
+from pages import SearchForm
 
 ## inicialização do user ##
 
@@ -23,9 +20,11 @@ if st.user.is_logged_in:
         "Recursos": [
             st.Page("pages/Meal plan.py", title="Plano Alimentar"),
             st.Page("pages/Shopping list.py", title="Lista de Compras"),
-            st.Page("pages/SearchResults.py", title="Pesquisa"),
         ],
     }
+
+    with st.sidebar:
+        SearchForm.displaySearchForm()
 else:
     pages = [st.Page("pages/Login.py", title="Login")]
 
