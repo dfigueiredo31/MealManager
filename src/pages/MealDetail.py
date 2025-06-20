@@ -3,6 +3,54 @@ import datetime as dt
 from typing import Literal
 
 
+# st.subheader(result["title"])
+# col1, col2 = st.columns(2)
+# with col1:
+#     st.image(
+#         result["image"],
+#     )
+
+
+# with col2:
+#     declaracaoNutricional = list(
+#         result["nutrition"]["nutrients"][i] for i in [0, 1, 3, 7, 10]
+#     )
+#     col1, col2 = st.columns(2)
+#     for infoNutricional in declaracaoNutricional:
+#         with col1:
+#             with st.container(height=20, border=False):
+#                 st.caption(
+#                     f"{infoNutricional["name"]} : {infoNutricional["amount"]} {infoNutricional["unit"]}"
+#                 )
+#         with col2:
+#             with st.container(height=20, border=False):
+#                 st.progress(
+#                     (
+#                         infoNutricional["percentOfDailyNeeds"]
+#                         if infoNutricional["percentOfDailyNeeds"] <= 100
+#                         else 100
+#                     )
+#                     / 100
+#                 )
+def mealNutritionalInfo(meal):
+    nutritionStats = list(meal["nutrition"]["nutrients"][i] for i in [0, 1, 3, 7, 10])
+    col1, col2 = st.columns(2)
+    for stat in nutritionStats:
+        with col1:
+            with st.container(height=20, border=False):
+                st.caption(f"{stat["name"]} : {stat["amount"]} {stat["unit"]}")
+        with col2:
+            with st.container(height=20, border=False):
+                st.progress(
+                    (
+                        stat["percentOfDailyNeeds"]
+                        if stat["percentOfDailyNeeds"] <= 100
+                        else 100
+                    )
+                    / 100
+                )
+
+
 def mealDetailStandalone(
     recipe,
     showTitle: bool,
@@ -15,8 +63,22 @@ def mealDetailStandalone(
     if showTitle:
         st.subheader(recipe["title"])
 
-    if showImage:
+    if showImage and not showNutrition:
         st.image(recipe["image"], use_container_width=True)
+
+    if showNutrition and not showImage:
+        with st.expander("Declaração nutricional"):
+            mealNutritionalInfo(recipe)
+
+    if showImage and showNutrition:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(
+                recipe["image"],
+            )
+
+        with col2:
+            mealNutritionalInfo(recipe)
 
     if showSummary:
         st.html(
@@ -27,29 +89,6 @@ def mealDetailStandalone(
         with st.expander("Ingredientes"):
             for ingrediente in recipe["nutrition"]["ingredients"]:
                 st.caption(ingrediente["name"])
-
-    if showNutrition:
-        with st.expander("Declaração nutricional"):
-            declaracaoNutricional = list(
-                recipe["nutrition"]["nutrients"][i] for i in [0, 1, 3, 7, 10]
-            )
-            col1, col2 = st.columns(2)
-            for infoNutricional in declaracaoNutricional:
-                with col1:
-                    with st.container(height=20, border=False):
-                        st.caption(
-                            f"{infoNutricional["name"]} : {infoNutricional["amount"]} {infoNutricional["unit"]}"
-                        )
-                with col2:
-                    with st.container(height=20, border=False):
-                        st.progress(
-                            (
-                                infoNutricional["percentOfDailyNeeds"]
-                                if infoNutricional["percentOfDailyNeeds"] <= 100
-                                else 100
-                            )
-                            / 100
-                        )
 
 
 @st.dialog("Detalhe")

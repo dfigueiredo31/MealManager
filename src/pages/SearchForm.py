@@ -1,6 +1,6 @@
 import streamlit as st
 from infrastructure import Api
-from pages import SearchResultsModal
+from pages import SearchResults
 
 
 def searchCallBackFunction():
@@ -19,7 +19,7 @@ def searchCallBackFunction():
         10,
     ).json()["results"]
     # st.switch_page(st.Page("pages/SearchResults.py"))
-    SearchResultsModal.displaySearchResults(searchResults)
+    SearchResults.displaySearchResults(searchResults)
 
 
 def displaySearchForm():
