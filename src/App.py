@@ -3,15 +3,21 @@ from infrastructure import *
 from entities import *
 from pages import SearchForm
 
-## inicialização do user ##
 
-if st.user.is_logged_in and Db.getUser(st.user["email"]) is None:  # no primeiro login
-    user = User.User(0, st.user["given_name"], st.user["family_name"], st.user["email"])
-    Db.addUser(user)
-
-
-## configuração da sidebar de navegação ##
 if st.user.is_logged_in:
+
+    ## inicialização do user ##
+    user = Db.getUser(st.user["email"])
+    if user:  # apos primeiro login
+        if "currentUser" not in st.session_state:
+            st.session_state.currentUser = user
+    else:  # no primeiro login
+        user = User.User(
+            0, st.user["given_name"], st.user["family_name"], st.user["email"]
+        )
+        Db.addUser(user)
+
+    ## configuração da sidebar de navegação ##
     pages = {
         "Pessoal": [
             st.Page("pages/Home.py", title="Home"),
@@ -25,7 +31,7 @@ if st.user.is_logged_in:
 
     with st.sidebar:
         SearchForm.displaySearchForm()
-else:
+else:  # sem login
     pages = [st.Page("pages/Login.py", title="Login")]
 
 

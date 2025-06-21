@@ -5,7 +5,7 @@ from pages import SearchForm
 
 ## Meal plan page ##
 user = Db.getUser(st.user["email"])
-userMealPlans = Db.getUserMealPlans(user.id)
+# userMealPlans = Db.getUserMealPlans(user.id)
 
 
 @st.dialog("Novo plano")
@@ -21,9 +21,9 @@ def newPlan():
 
 st.title("Plano alimentar")
 
-if len(userMealPlans) != 0:
+if len(user.mealPlans) != 0:
 
-    for mealPlan in userMealPlans:
+    for mealPlan in user.mealPlans:
         st.divider()
         st.write(f"Nome: {mealPlan.name}")
         st.write(f"Data inicio: {mealPlan.startDate}")
