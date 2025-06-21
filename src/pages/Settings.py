@@ -7,8 +7,6 @@ user = Db.getUser(st.user["email"])
 diets = Db.getDiets()
 intolerances = Db.getIntolerances()
 
-st.write(user.__dict__)
-
 st.title("Definições")
 
 st.subheader("Utilizador")

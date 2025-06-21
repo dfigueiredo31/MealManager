@@ -5,7 +5,6 @@ from pages import SearchForm
 
 ## Meal plan page ##
 user = Db.getUser(st.user["email"])
-# userMealPlans = Db.getUserMealPlans(user.id)
 
 
 @st.dialog("Novo plano")

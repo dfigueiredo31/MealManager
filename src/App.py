@@ -8,10 +8,7 @@ if st.user.is_logged_in:
 
     ## inicialização do user ##
     user = Db.getUser(st.user["email"])
-    if user:  # apos primeiro login
-        if "currentUser" not in st.session_state:
-            st.session_state.currentUser = user
-    else:  # no primeiro login
+    if not user:  # no primeiro login
         user = User.User(
             0, st.user["given_name"], st.user["family_name"], st.user["email"]
         )

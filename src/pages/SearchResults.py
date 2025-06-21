@@ -1,5 +1,7 @@
+from ast import Add
 import streamlit as st
 from pages import MealDetail
+from pages import AddToPlanForm
 
 
 @st.dialog("Resultados pesquisa")
@@ -9,5 +11,6 @@ def displaySearchResults(results):
     else:
         for result in results:
             MealDetail.displayMealDetail(
-                result, "standalone", True, True, False, True, True, True, True
+                result, "standalone", True, True, False, True, True, True
             )
+            AddToPlanForm.displayAddToPlanForm(result)

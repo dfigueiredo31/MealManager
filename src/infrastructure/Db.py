@@ -324,7 +324,7 @@ def getMealPlanItems(mealPlanId: int) -> list:
         )
         result = []
         for row in cur.fetchall():
-            result.append(MealPlanItem(row[0], row[1], row[2], row[3], row[4]))
+            result.append(MealPlanItem(row[0], row[2], row[3], row[4], row[5]))
         return result
 
 

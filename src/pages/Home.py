@@ -39,7 +39,7 @@ def sugestaoDoDia():
     st.button(
         "Ver mais",
         on_click=MealDetail.displayMealDetail,
-        args=[receita, "modal", True, False, False, True, True, False, True],
+        args=[receita, "modal", True, False, False, True, True, False],
     )
 
 
