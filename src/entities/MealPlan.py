@@ -1,4 +1,5 @@
 from datetime import date
+from entities.MealPlanItem import MealPlanItem
 
 
 class MealPlan:
@@ -7,7 +8,7 @@ class MealPlan:
         id: int,
         startDate: date,
         endDate: date,
-        mealPlanItems: list,
+        mealPlanItems: dict[str, list[MealPlanItem]],
         name: str = None,
     ):
         """Initializes a MealPlan object

@@ -307,13 +307,15 @@ def getUserMealPlans(userId: int) -> list:
         result = []
         for row in cur.fetchall():
             mealPlanItems = getMealPlanItems(row[0])
+
             result.append(MealPlan(row[0], row[2], row[3], mealPlanItems, row[4]))
         return result
 
 
-def getMealPlanItems(mealPlanId: int) -> list:
+def getMealPlanItems(mealPlanId: int) -> dict[str, MealPlanItem]:
     with db.connect("appdata.db") as conn:
         cur = conn.cursor()
+
         cur.execute(
             """
             SELECT rowid, *
@@ -322,9 +324,13 @@ def getMealPlanItems(mealPlanId: int) -> list:
             """,
             (mealPlanId,),
         )
-        result = []
-        for row in cur.fetchall():
-            result.append(MealPlanItem(row[0], row[2], row[3], row[4], row[5]))
+
+        rows = cur.fetchall()
+        result = {x[3]: [] for x in rows}
+
+        for row in rows:
+            result[row[3]].append(MealPlanItem(row[0], row[2], row[3], row[4], row[5]))
+
         return result
 
 
