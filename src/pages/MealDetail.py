@@ -30,7 +30,6 @@ def mealDetailStandalone(
     showNutrition: bool,
     showPreparationSteps: bool,
 ):
-    st.json(recipe, expanded=False)
     if showTitle:
         st.subheader(recipe["title"])
 
